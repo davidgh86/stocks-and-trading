@@ -1,1 +1,17 @@
-<a class="waves-effect waves-light btn">button</a>
+<mat-toolbar>
+  <i class="material-icons" (click)="drawer.toggle()">
+    menu
+  </i>
+  <span> My Application</span>
+</mat-toolbar>
+<mat-drawer-container class="example-container" autosize>
+
+  <mat-drawer #drawer class="example-sidenav" mode="side">
+    <p>Auto-resizing sidenav</p>
+  </mat-drawer>
+
+  <div class="example-sidenav-content">
+
+
+  </div>
+</mat-drawer-container>
