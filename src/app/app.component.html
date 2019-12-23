@@ -8,12 +8,11 @@
 
   <mat-drawer #drawer class="example-sidenav side-menu-grid" mode="side">
     <div>Portfolio</div>
-    <div>Indexes</div>
+    <div><a routerLink="/indexes">Indexes</a></div>
     <div>Best rated companies</div>
   </mat-drawer>
 
   <div class="example-sidenav-content">
-
-
+    <router-outlet></router-outlet>
   </div>
 </mat-drawer-container>
