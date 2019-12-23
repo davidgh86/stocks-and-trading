@@ -25,11 +25,11 @@ export class StockChartComponent implements OnInit {
   ngOnInit() {
     this.data = [
       // minimum, open, close, maximum
-        ['Mon', 20, 28, 38, 45],
-        ['Tue', 31, 38, 55, 66],
-        ['Wed', 50, 55, 77, 80],
-        ['Thu', 77, 77, 66, 50],
-        ['Fri', 68, 66, 22, 15],
+      [new Date('2019-1-1'), 20, 28, 38, 45],
+      [new Date('2019-1-2'), 31, 38, 55, 66],
+      [new Date('2019-1-3'), 50, 55, 77, 80],
+      [new Date('2019-1-4'), 77, 77, 66, 50],
+      [new Date('2019-1-5'), 68, 66, 22, 15],
     ];
   }
 
