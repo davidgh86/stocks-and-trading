@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { StockDataProviderService } from '../core/stock-data-provider.service';
 
 @Component({
   selector: 'app-stock-chart',
@@ -20,10 +21,10 @@ export class StockChartComponent implements OnInit {
   width;
   height;
 
-  constructor() { }
+  constructor(private stockDataProviderService: StockDataProviderService) { }
 
-  ngOnInit() {
-    const mainContainer = document.querySelector('#app-main-content')
+  async ngOnInit() {
+    const mainContainer = document.querySelector('#app-main-content');
     this.width = mainContainer.clientWidth;
     const posibleHeight = mainContainer.clientHeight;
     const ratioHeightWidth = 0.6;
@@ -32,6 +33,8 @@ export class StockChartComponent implements OnInit {
     } else {
       this.height = posibleHeight;
     }
+    let pipe = await this.stockDataProviderService.getDaily('MSFT');
+    console.log(pipe);
     this.data = [
       // minimum, open, close, maximum
       [new Date('2019-1-1'), 20, 28, 38, 45],
