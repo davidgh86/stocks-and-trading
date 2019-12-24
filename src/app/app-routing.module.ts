@@ -6,6 +6,10 @@ const routes: Routes = [
   {
     path: 'indexes',
     loadChildren: () => import('./indexes/indexes.module').then(m => m.IndexesModule)
+  },
+  {
+    path: 'indexes/stock-chart',
+    loadChildren: () => import('./stock-chart/stock-chart.module').then(m => m.StockChartModule)
   }
 ];
 

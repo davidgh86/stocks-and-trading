@@ -7,12 +7,12 @@
 <mat-drawer-container class="example-container" autosize>
 
   <mat-drawer #drawer class="example-sidenav side-menu-grid" mode="side">
-    <div>Portfolio</div>
+    <div><a routerLink="/indexes/stock-chart">Portfolio</a></div>
     <div><a routerLink="/indexes">Indexes</a></div>
     <div>Best rated companies</div>
   </mat-drawer>
 
-  <div class="example-sidenav-content">
+  <div class="example-sidenav-content" id="app-main-content">
     <router-outlet></router-outlet>
   </div>
 </mat-drawer-container>
