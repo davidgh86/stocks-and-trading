@@ -17,12 +17,21 @@ export class StockChartComponent implements OnInit {
       risingColor: { strokeWidth: 2, stroke: '#0f9d58' }   // green
     }
   };
-  width = 550;
-  height = 400;
+  width;
+  height;
 
   constructor() { }
 
   ngOnInit() {
+    const mainContainer = document.querySelector('#app-main-content')
+    this.width = mainContainer.clientWidth;
+    const posibleHeight = mainContainer.clientHeight;
+    const ratioHeightWidth = 0.6;
+    if ((posibleHeight / this.width) > ratioHeightWidth ) {
+      this.height = ratioHeightWidth * this.width;
+    } else {
+      this.height = posibleHeight;
+    }
     this.data = [
       // minimum, open, close, maximum
       [new Date('2019-1-1'), 20, 28, 38, 45],
