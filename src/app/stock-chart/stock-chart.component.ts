@@ -21,9 +21,11 @@ export class StockChartComponent implements OnInit {
   width;
   height;
 
-  constructor(private stockDataProviderService: StockDataProviderService) { }
+  constructor(
+    private stockDataProviderService: StockDataProviderService
+    ) { }
 
-  async ngOnInit() {
+  ngOnInit() {
     const mainContainer = document.querySelector('#app-main-content');
     this.width = mainContainer.clientWidth;
     const posibleHeight = mainContainer.clientHeight;
@@ -33,8 +35,10 @@ export class StockChartComponent implements OnInit {
     } else {
       this.height = posibleHeight;
     }
-    let pipe = await this.stockDataProviderService.getDaily('MSFT');
-    console.log(pipe);
+    let pipe = this.stockDataProviderService.getDaily('MSFT');
+    pipe.subscribe(response => {
+      console.log('->>>>'+JSON.stringify(response))
+    });
     this.data = [
       // minimum, open, close, maximum
       [new Date('2019-1-1'), 20, 28, 38, 45],
