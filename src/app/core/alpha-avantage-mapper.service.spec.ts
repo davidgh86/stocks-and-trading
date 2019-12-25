@@ -10,7 +10,7 @@ describe('AlphaAvantageMapperService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('mapper should workt', () => {
+  it('mapper to alphaAvantageMapper should workt', () => {
     const service: AlphaAvantageMapperService = TestBed.get(AlphaAvantageMapperService);
     const response = '{"Meta Data": {"1. Information":"Daily Prices (open, high, low, close) and Volumes","2. Symbol":"MSFT", "3. Last Refreshed":"2019-12-24", "4. Output Size":"Full size", "5. Time Zone":"US/Eastern"}, "Time Series (Daily)": {"2019-12-24": {"1. open":"157.4800","2. high":"157.7100","3. low":"157.1150","4. close":"157.3800","5. volume":"8988500"}, "2019-12-23":{"1. open":"158.1200","2. high":"158.1200","3. low":"157.2700","4. close":"157.4100","5. volume":"17726283"}}}'
     const resp = service.mapToTimeSerie(JSON.parse(response));
@@ -35,4 +35,24 @@ describe('AlphaAvantageMapperService', () => {
     expect(resp.quotes[0].volume).toBe(17726283)
     
   });
+
+  it('mapper to google chart should workt', () => {
+    const service: AlphaAvantageMapperService = TestBed.get(AlphaAvantageMapperService);
+    const response = JSON.parse('{"Meta Data": {"1. Information":"Daily Prices (open, high, low, close) and Volumes","2. Symbol":"MSFT", "3. Last Refreshed":"2019-12-24", "4. Output Size":"Full size", "5. Time Zone":"US/Eastern"}, "Time Series (Daily)": {"2019-12-24": {"1. open":"157.4800","2. high":"157.7100","3. low":"157.1150","4. close":"157.3800","5. volume":"8988500"}, "2019-12-23":{"1. open":"158.1200","2. high":"160.1200","3. low":"157.2700","4. close":"159.4100","5. volume":"17726283"}}}');
+    const mappedResponse = service.mapToTimeSerie(response);
+    const googleChartFormatQuote = service.toGoogleChartModel(mappedResponse);
+    
+    expect(googleChartFormatQuote[0][0]).toEqual(new Date("2019-12-24"))
+    expect(googleChartFormatQuote[0][1]).toBe(mappedResponse.quotes[0].low)
+    expect(googleChartFormatQuote[0][2]).toBe(mappedResponse.quotes[0].close)
+    expect(googleChartFormatQuote[0][3]).toBe(mappedResponse.quotes[0].open)
+    expect(googleChartFormatQuote[0][4]).toBe(mappedResponse.quotes[0].high)
+
+    expect(googleChartFormatQuote[1][0]).toEqual(new Date("2019-12-23"))
+    expect(googleChartFormatQuote[1][1]).toBe(mappedResponse.quotes[1].low)
+    expect(googleChartFormatQuote[1][2]).toBe(mappedResponse.quotes[1].open)
+    expect(googleChartFormatQuote[1][3]).toBe(mappedResponse.quotes[1].close)
+    expect(googleChartFormatQuote[1][4]).toBe(mappedResponse.quotes[1].high)
+  });
+
 });

@@ -16,12 +16,11 @@ export class StockDataProviderService {
 
   messages: string[] = [];
 
-  getDaily(symbol: string): Observable<any> {
+  async getDaily(symbol: string): Promise<any> {
 
-    return this.http.get<any>(`${this.url}/daily/${symbol}`).pipe(
-      tap(_ => console.log('fetched heroes')),
-      catchError(this.handleError<any>('getDaily', []))
-    );
+    const result = await this.http.get<any>(`${this.url}/daily/${symbol}`).toPromise();
+
+    return result;
   }
 
   private handleError<T> (operation = 'operation', result?: T) {

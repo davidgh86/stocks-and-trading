@@ -11,7 +11,7 @@ export class StockChartComponent implements OnInit {
 
   title = '';
   type = 'CandlestickChart';
-  data = null;
+  data = [];
   options = {
     legend: 'none',
     candlestick: {
@@ -27,7 +27,7 @@ export class StockChartComponent implements OnInit {
     private alphaAvantageMapperService: AlphaAvantageMapperService
     ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     const mainContainer = document.querySelector('#app-main-content');
     this.width = mainContainer.clientWidth;
     const posibleHeight = mainContainer.clientHeight;
@@ -37,19 +37,14 @@ export class StockChartComponent implements OnInit {
     } else {
       this.height = posibleHeight;
     }
-    let pipe = this.stockDataProviderService.getDaily('MSFT');
-    let dataToPaint;
-    pipe.subscribe(response => {
-      dataToPaint = this.alphaAvantageMapperService.mapToTimeSerie(response);
-    });
-    this.data = [
-      // minimum, open, close, maximum
-      [new Date('2019-1-1'), 20, 28, 38, 45],
-      [new Date('2019-1-2'), 31, 38, 55, 66],
-      [new Date('2019-1-3'), 50, 55, 77, 80],
-      [new Date('2019-1-4'), 77, 77, 66, 50],
-      [new Date('2019-1-5'), 68, 66, 22, 15],
-    ];
+    const dailyRequest = await this.stockDataProviderService.getDaily('AAPL');
+
+    const alphaModelResponse = this.alphaAvantageMapperService.mapToTimeSerie(dailyRequest);
+    console.log(alphaModelResponse.quotes[1].date instanceof Date)
+    
+    this.data = this.alphaAvantageMapperService.toGoogleChartModel(alphaModelResponse);
+    
+    console.log(JSON.stringify(this.data))
   }
 
 }

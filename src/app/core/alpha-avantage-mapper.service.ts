@@ -26,11 +26,11 @@ export class AlphaAvantageMapperService {
           timeSeriesArray.push(
             {
               date: new Date(key),
-              open: quote['1. open'],
-              high: quote['2. high'],
-              low: quote['3. low'],
-              close: quote['4. close'],
-              volume: quote['5. volume']
+              open: parseFloat(quote['1. open']),
+              high: parseFloat(quote['2. high']),
+              low: parseFloat(quote['3. low']),
+              close: parseFloat(quote['4. close']),
+              volume: parseFloat(quote['5. volume'])
             }
           )
       }
@@ -48,5 +48,21 @@ export class AlphaAvantageMapperService {
       },
       quotes: timeSeriesArray
     }
+  }
+
+  public toGoogleChartModel(timeSerie: TimeSerie){
+    let result = [];
+    let quotes = timeSerie.quotes;
+    for (let quote of quotes){
+      
+      result.push([  
+        quote.date, 
+        quote.low,
+        quote.open<quote.close?quote.open:quote.close, 
+        quote.open>=quote.close?quote.open:quote.close,
+        quote.high
+      ])
+    }
+    return result;
   }
 }

@@ -1,8 +1,8 @@
 export interface AlphavantageQuote {
   date: Date;
-  open: number;
-  high: number;
-  low: number;
-  close: number;
-  volume: number;
+  open: Number;
+  high: Number;
+  low: Number;
+  close: Number;
+  volume: Number;
 }
