@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { StockDataProviderService } from '../core/stock-data-provider.service';
+import { AlphaAvantageMapperService } from '../core/alpha-avantage-mapper.service';
 
 @Component({
   selector: 'app-stock-chart',
@@ -22,7 +23,8 @@ export class StockChartComponent implements OnInit {
   height;
 
   constructor(
-    private stockDataProviderService: StockDataProviderService
+    private stockDataProviderService: StockDataProviderService,
+    private alphaAvantageMapperService: AlphaAvantageMapperService
     ) { }
 
   ngOnInit() {
@@ -36,8 +38,9 @@ export class StockChartComponent implements OnInit {
       this.height = posibleHeight;
     }
     let pipe = this.stockDataProviderService.getDaily('MSFT');
+    let dataToPaint;
     pipe.subscribe(response => {
-      console.log('->>>>'+JSON.stringify(response))
+      dataToPaint = this.alphaAvantageMapperService.mapToTimeSerie(response);
     });
     this.data = [
       // minimum, open, close, maximum
