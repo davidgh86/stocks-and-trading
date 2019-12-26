@@ -33,18 +33,16 @@ export class StockChartComponent implements OnInit {
     const posibleHeight = mainContainer.clientHeight;
     const ratioHeightWidth = 0.6;
     if ((posibleHeight / this.width) > ratioHeightWidth ) {
-      this.height = ratioHeightWidth * this.width;
+      this.height = ratioHeightWidth * this.width * 3;
     } else {
-      this.height = posibleHeight;
+      this.height = posibleHeight * 3;
     }
     const dailyRequest = await this.stockDataProviderService.getDaily('AAPL');
 
     const alphaModelResponse = this.alphaAvantageMapperService.mapToTimeSerie(dailyRequest);
-    console.log(alphaModelResponse.quotes[1].date instanceof Date)
     
-    this.data = this.alphaAvantageMapperService.toGoogleChartModel(alphaModelResponse);
+    this.data = this.alphaAvantageMapperService.toGoogleChartModel(alphaModelResponse)//.filter(a => a[0]>new Date("2019-11-1"));
     
-    console.log(JSON.stringify(this.data))
   }
 
 }

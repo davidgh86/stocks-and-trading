@@ -54,13 +54,13 @@ export class AlphaAvantageMapperService {
     let result = [];
     let quotes = timeSerie.quotes;
     for (let quote of quotes){
-      
+      let upward = quote.open <= quote.close
       result.push([  
         quote.date, 
-        quote.low,
-        quote.open<quote.close?quote.open:quote.close, 
-        quote.open>=quote.close?quote.open:quote.close,
-        quote.high
+        upward?quote.low:quote.high,
+        quote.open, 
+        quote.close,
+        upward?quote.high:quote.low
       ])
     }
     return result;
