@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { StockDataProviderService } from '../core/stock-data-provider.service';
 import { AlphaAvantageMapperService } from '../core/alpha-avantage-mapper.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-stock-chart',
@@ -24,25 +25,30 @@ export class StockChartComponent implements OnInit {
 
   constructor(
     private stockDataProviderService: StockDataProviderService,
-    private alphaAvantageMapperService: AlphaAvantageMapperService
+    private alphaAvantageMapperService: AlphaAvantageMapperService,
+    private route: ActivatedRoute
     ) { }
 
   async ngOnInit() {
+    //this.setSize();
+    const symbol = this.route.snapshot.paramMap.get('symbol');
+    console.log(symbol)
+    const dailyRequest = await this.stockDataProviderService.getDaily(symbol);
+    const alphaModelResponse = this.alphaAvantageMapperService.mapToTimeSerie(dailyRequest);
+    this.data = this.alphaAvantageMapperService.toGoogleChartModel(alphaModelResponse);//.filter(a => a[0]>new Date("2019-11-1"));
+
+  }
+
+  setSize() {
     const mainContainer = document.querySelector('#app-main-content');
     this.width = mainContainer.clientWidth;
     const posibleHeight = mainContainer.clientHeight;
     const ratioHeightWidth = 0.6;
     if ((posibleHeight / this.width) > ratioHeightWidth ) {
-      this.height = ratioHeightWidth * this.width * 3;
+      this.height = ratioHeightWidth * this.width;
     } else {
-      this.height = posibleHeight * 3;
+      this.height = posibleHeight;
     }
-    const dailyRequest = await this.stockDataProviderService.getDaily('AAPL');
-
-    const alphaModelResponse = this.alphaAvantageMapperService.mapToTimeSerie(dailyRequest);
-    
-    this.data = this.alphaAvantageMapperService.toGoogleChartModel(alphaModelResponse)//.filter(a => a[0]>new Date("2019-11-1"));
-    
   }
 
 }

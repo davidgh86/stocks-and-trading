@@ -8,7 +8,7 @@ const routes: Routes = [
     loadChildren: () => import('./indexes/indexes.module').then(m => m.IndexesModule)
   },
   {
-    path: 'indexes/stock-chart',
+    path: 'indexes/stock-chart/:symbol',
     loadChildren: () => import('./stock-chart/stock-chart.module').then(m => m.StockChartModule)
   }
 ];
