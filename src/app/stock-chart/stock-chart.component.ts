@@ -30,9 +30,8 @@ export class StockChartComponent implements OnInit {
     ) { }
 
   async ngOnInit() {
-    //this.setSize();
+    this.setSize();
     const symbol = this.route.snapshot.paramMap.get('symbol');
-    console.log(symbol)
     const dailyRequest = await this.stockDataProviderService.getDaily(symbol);
     const alphaModelResponse = this.alphaAvantageMapperService.mapToTimeSerie(dailyRequest);
     this.data = this.alphaAvantageMapperService.toGoogleChartModel(alphaModelResponse);//.filter(a => a[0]>new Date("2019-11-1"));
