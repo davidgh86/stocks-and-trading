@@ -61,7 +61,7 @@ export class AlphaAvantageMapperService {
         quote.open,
         quote.close,
         upward ? quote.high : quote.low,
-        (quote.volume / 1000000)
+        quote.volume
       ]);
     }
     return result;

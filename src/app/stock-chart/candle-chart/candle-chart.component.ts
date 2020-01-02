@@ -37,16 +37,16 @@ export class CandleChartComponent implements OnInit {
         controlType: 'ChartRangeFilter',
         containerId: 'control_div',
         options: {
-            filterColumnIndex: 0,
-            ui: {
-                chartOptions: {
-                    height: 30,
-                    width: 600,
-                    chartArea: {
-                        width: '90%'
-                    }
-                }
-            }
+          filterColumnIndex: 0,
+          ui: {
+              chartOptions: {
+                  height: 30,
+                  width: 600,
+                  chartArea: {
+                      width: '90%'
+                  }
+              }
+          }
         }
     });
 
@@ -56,8 +56,15 @@ export class CandleChartComponent implements OnInit {
         options: {
           title: this.symbol,
           legend: 'none',
+          vAxes: {
+            0: { logScale: false, title: 'stock value' },
+            1: {
+              logScale: false,
+              title: 'volume',
+            }
+          },
           seriesType: 'candlesticks',
-          series: {1: {type: 'bars'}},
+          series: {1: {type: 'line', targetAxisIndex: 1}},
           height: 500,
           candlestick: {
             fallingColor: { strokeWidth: 2, stroke: '#a52714' }, // red
