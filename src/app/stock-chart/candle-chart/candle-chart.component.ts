@@ -31,41 +31,49 @@ export class CandleChartComponent implements OnInit {
     const dataArray = this.alphaAvantageMapperService.toGoogleChartModel(alphaModelResponse);//.filter(a => a[0]>new Date("2019-11-1"));
     const data = google.visualization.arrayToDataTable(dataArray, true);
 
-    // Create a dashboard.
-    var dashboard = new this.gLib.visualization.Dashboard(
-        document.getElementById('dashboard_div'));
+    const dash = new this.gLib.visualization.Dashboard(document.getElementById('dashboard'));
 
-    // Create a range slider, passing some options
-    var donutRangeSlider = new this.gLib.visualization.ControlWrapper({
-      'controlType': 'ChartRangeFilter',
-      'containerId': 'filter_div',
-      'options': {
-        'filterColumnIndex': 0
-      }
+    const control = new this.gLib.visualization.ControlWrapper({
+        controlType: 'ChartRangeFilter',
+        containerId: 'control_div',
+        options: {
+            filterColumnIndex: 0,
+            ui: {
+                chartOptions: {
+                    height: 30,
+                    width: 600,
+                    chartArea: {
+                        width: '90%'
+                    }
+                }
+            }
+        }
     });
 
-    // Create a pie chart, passing some options
-    var pieChart = new this.gLib.visualization.ChartWrapper({
-      'chartType': 'CandlestickChart',
-      'containerId': 'chart_div',
-      'options': {
-        'width': 300,
-        'height': 300
-      }
+    const chart = new this.gLib.visualization.ChartWrapper({
+        chartType: 'CandlestickChart',
+        containerId: 'chart_div'
     });
 
-    // Establish dependencies, declaring that 'filter' drives 'pieChart',
-    // so that the pie chart will only display entries that are let through
-    // given the chosen slider range.
-    dashboard.bind(donutRangeSlider, pieChart);
+    function setOptions(wrapper) {
 
-    // Draw the dashboard.
-    dashboard.draw(data);
-  }
+        wrapper.setOption('width', 600);
+        wrapper.setOption('chartArea.width', '80%');
+
+    }
+
+    setOptions(chart);
+
+
+    dash.bind([control], [chart]);
+    dash.draw(data);
+
+}
 
   ngOnInit() {
     this.gLib = this.gChartService.getGoogle();
-    this.gLib.charts.load('current', {packages: ['corechart', 'table', 'controls', 'timeline']});
+    this.gLib.charts.load('visualization', '1', {packages: ['controls', 'charteditor']});
+
     this.gLib.charts.setOnLoadCallback(this.drawChart.bind(this));
   }
 
