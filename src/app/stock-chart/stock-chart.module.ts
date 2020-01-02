@@ -7,6 +7,7 @@ import { StockChartRoutingModule } from './stock-chart-routing.module';
 import { StockChartComponent } from './stock-chart.component';
 import { ServiceModule } from './service/service.module';
 import { CandleChartComponent } from './candle-chart/candle-chart.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [StockChartComponent, CandleChartComponent],
@@ -14,7 +15,8 @@ import { CandleChartComponent } from './candle-chart/candle-chart.component';
     CommonModule,
     StockChartRoutingModule,
     GoogleChartsModule,
-    ServiceModule
+    ServiceModule,
+    MatProgressSpinnerModule
   ],
 })
 export class StockChartModule { }

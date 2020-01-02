@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { GoogleChartService } from '../service/google-chart.service';
 import { StockDataProviderService } from 'src/app/core/stock-data-provider.service';
 import { AlphaAvantageMapperService } from 'src/app/core/alpha-avantage-mapper.service';
@@ -14,20 +14,19 @@ export class CandleChartComponent implements OnInit {
   @Input() symbol: string;
   // tslint:disable-next-line: no-input-rename
   @Input('full-content') fullContent: boolean;
+  @Output() stockValueReceived = new EventEmitter();
 
   private gLib: any;
 
   constructor(private gChartService: GoogleChartService,
               private stockDataProviderService: StockDataProviderService,
-              private alphaAvantageMapperService: AlphaAvantageMapperService,
-              private route: ActivatedRoute){
-
-
+              private alphaAvantageMapperService: AlphaAvantageMapperService) {
   }
 
   private async drawChart() {
 
     const dailyRequest = await this.stockDataProviderService.getDaily(this.symbol, this.fullContent);
+    this.stockValueReceived.emit();
     const alphaModelResponse = this.alphaAvantageMapperService.mapToTimeSerie(dailyRequest);
     const dataArray = this.alphaAvantageMapperService.toGoogleChartModel(alphaModelResponse);//.filter(a => a[0]>new Date("2019-11-1"));
     const data = google.visualization.arrayToDataTable(dataArray, true);

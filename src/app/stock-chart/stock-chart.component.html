@@ -1,1 +1,2 @@
-<app-candle-chart [symbol]="symbol" [full-content]="true"></app-candle-chart>
+<mat-progress-spinner *ngIf="!chartDataReceived" mode="indeterminate"></mat-progress-spinner>
+<app-candle-chart [symbol]="symbol" [full-content]="true" (stockValueReceived)="setValueAsRecieved()"></app-candle-chart>

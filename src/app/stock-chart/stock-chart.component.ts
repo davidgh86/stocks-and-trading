@@ -12,6 +12,7 @@ export class StockChartComponent implements OnInit {
   subscriptionParams: any;
   symbol: string;
   full: boolean;
+  chartDataReceived: boolean;
 
   constructor(private route: ActivatedRoute) {}
 
@@ -21,6 +22,11 @@ export class StockChartComponent implements OnInit {
     this.full = this.route.snapshot.queryParams.full === 'true';
 
     this.symbol = this.route.snapshot.params.symbol;
+    this.chartDataReceived = false;
+  }
+
+  setValueAsRecieved() {
+    this.chartDataReceived = true;
   }
 
 }
