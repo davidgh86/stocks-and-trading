@@ -31,24 +31,41 @@ export class CandleChartComponent implements OnInit {
     const dataArray = this.alphaAvantageMapperService.toGoogleChartModel(alphaModelResponse);//.filter(a => a[0]>new Date("2019-11-1"));
     const data = google.visualization.arrayToDataTable(dataArray, true);
 
-    const chart = new this.gLib.visualization.CandlestickChart(document.getElementById('divLineChart'));
+    // Create a dashboard.
+    var dashboard = new this.gLib.visualization.Dashboard(
+        document.getElementById('dashboard_div'));
 
-    const options = {
-      title: this.symbol,
-      legend: 'none',
-      width: 800,
-      height: 600,
-      candlestick: {
-        fallingColor: { strokeWidth: 2, stroke: '#a52714' }, // red
-        risingColor: { strokeWidth: 2, stroke: '#0f9d58' }   // green
+    // Create a range slider, passing some options
+    var donutRangeSlider = new this.gLib.visualization.ControlWrapper({
+      'controlType': 'ChartRangeFilter',
+      'containerId': 'filter_div',
+      'options': {
+        'filterColumnIndex': 0
       }
-    };
-    chart.draw(data, options);
+    });
+
+    // Create a pie chart, passing some options
+    var pieChart = new this.gLib.visualization.ChartWrapper({
+      'chartType': 'CandlestickChart',
+      'containerId': 'chart_div',
+      'options': {
+        'width': 300,
+        'height': 300
+      }
+    });
+
+    // Establish dependencies, declaring that 'filter' drives 'pieChart',
+    // so that the pie chart will only display entries that are let through
+    // given the chosen slider range.
+    dashboard.bind(donutRangeSlider, pieChart);
+
+    // Draw the dashboard.
+    dashboard.draw(data);
   }
 
   ngOnInit() {
     this.gLib = this.gChartService.getGoogle();
-    this.gLib.charts.load('current', {packages: ['corechart', 'table']});
+    this.gLib.charts.load('current', {packages: ['corechart', 'table', 'controls', 'timeline']});
     this.gLib.charts.setOnLoadCallback(this.drawChart.bind(this));
   }
 

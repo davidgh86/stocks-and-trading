@@ -9,20 +9,20 @@ export class AlphaAvantageMapperService {
   constructor() { }
 
   public mapToTimeSerie(dailyResponse): TimeSerie {
-    let metadata = dailyResponse['Meta Data'];
-    let information = metadata['1. Information'];
-    let symbol = metadata['2. Symbol'];
-    let lastRefreshed = new Date(metadata['3. Last Refreshed']);
-    let outputSize = metadata['4. Output Size'];
-    let timeZone = metadata['5. Time Zone'];
+    const metadata = dailyResponse['Meta Data'];
+    const information = metadata['1. Information'];
+    const symbol = metadata['2. Symbol'];
+    const lastRefreshed = new Date(metadata['3. Last Refreshed']);
+    const outputSize = metadata['4. Output Size'];
+    const timeZone = metadata['5. Time Zone'];
 
-    let timeSeriesData = dailyResponse['Time Series (Daily)']
-    let timeSeriesArray = [];
+    const timeSeriesData = dailyResponse['Time Series (Daily)'];
+    const timeSeriesArray = [];
 
-    for (var key in timeSeriesData) {
+    for (let key in timeSeriesData) {
       // check if the property/key is defined in the object itself, not in parent
-      if (timeSeriesData.hasOwnProperty(key)) {  
-          let quote = timeSeriesData[key]; 
+      if (timeSeriesData.hasOwnProperty(key)) {
+          const quote = timeSeriesData[key];
           timeSeriesArray.push(
             {
               date: new Date(key),
@@ -32,36 +32,36 @@ export class AlphaAvantageMapperService {
               close: parseFloat(quote['4. close']),
               volume: parseFloat(quote['5. volume'])
             }
-          )
+          );
       }
     }
-    
+
     return {
       metadata: {
-        information: information,
-        symbol: symbol,
-        lastRefreshed: lastRefreshed,
+        information,
+        symbol,
+        lastRefreshed,
         interval: null,
-        outputSize: outputSize,
+        outputSize,
         date: null,
-        timeZone: timeZone
+        timeZone
       },
       quotes: timeSeriesArray
-    }
+    };
   }
 
-  public toGoogleChartModel(timeSerie: TimeSerie){
-    let result = [];
-    let quotes = timeSerie.quotes;
-    for (let quote of quotes){
-      let upward = quote.open <= quote.close
-      result.push([  
-        quote.date, 
-        upward?quote.low:quote.high,
-        quote.open, 
+  public toGoogleChartModel(timeSerie: TimeSerie) {
+    const result = [];
+    const quotes = timeSerie.quotes;
+    for (const quote of quotes) {
+      const upward = quote.open <= quote.close;
+      result.push([
+        quote.date,
+        upward ? quote.low : quote.high,
+        quote.open,
         quote.close,
-        upward?quote.high:quote.low
-      ])
+        upward ? quote.high : quote.low
+      ]);
     }
     return result;
   }
