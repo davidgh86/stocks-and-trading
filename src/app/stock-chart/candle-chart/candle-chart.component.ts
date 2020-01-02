@@ -31,24 +31,58 @@ export class CandleChartComponent implements OnInit {
     const dataArray = this.alphaAvantageMapperService.toGoogleChartModel(alphaModelResponse);//.filter(a => a[0]>new Date("2019-11-1"));
     const data = google.visualization.arrayToDataTable(dataArray, true);
 
-    const chart = new this.gLib.visualization.CandlestickChart(document.getElementById('divLineChart'));
+    const dash = new this.gLib.visualization.Dashboard(document.getElementById('dashboard'));
 
-    const options = {
-      title: this.symbol,
-      legend: 'none',
-      width: 800,
-      height: 600,
-      candlestick: {
-        fallingColor: { strokeWidth: 2, stroke: '#a52714' }, // red
-        risingColor: { strokeWidth: 2, stroke: '#0f9d58' }   // green
-      }
-    };
-    chart.draw(data, options);
-  }
+    const control = new this.gLib.visualization.ControlWrapper({
+        controlType: 'ChartRangeFilter',
+        containerId: 'control_div',
+        options: {
+            filterColumnIndex: 0,
+            ui: {
+                chartOptions: {
+                    height: 30,
+                    width: 600,
+                    chartArea: {
+                        width: '90%'
+                    }
+                }
+            }
+        }
+    });
+
+    const chart = new this.gLib.visualization.ChartWrapper({
+        chartType: 'CandlestickChart',
+        containerId: 'chart_div',
+        options: {
+          title: this.symbol,
+          legend: 'none',
+          height: 500,
+          candlestick: {
+            fallingColor: { strokeWidth: 2, stroke: '#a52714' }, // red
+            risingColor: { strokeWidth: 2, stroke: '#0f9d58' }   // green
+          }
+        }
+    });
+
+    function setOptions(wrapper) {
+
+        wrapper.setOption('width', 600);
+        wrapper.setOption('chartArea.width', '80%');
+
+    }
+
+    setOptions(chart);
+
+
+    dash.bind([control], [chart]);
+    dash.draw(data);
+
+}
 
   ngOnInit() {
     this.gLib = this.gChartService.getGoogle();
-    this.gLib.charts.load('current', {packages: ['corechart', 'table']});
+    this.gLib.charts.load('visualization', '1', {packages: ['controls', 'charteditor']});
+
     this.gLib.charts.setOnLoadCallback(this.drawChart.bind(this));
   }
 
