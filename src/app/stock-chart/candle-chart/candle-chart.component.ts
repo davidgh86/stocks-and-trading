@@ -51,11 +51,13 @@ export class CandleChartComponent implements OnInit {
     });
 
     const chart = new this.gLib.visualization.ChartWrapper({
-        chartType: 'CandlestickChart',
+        chartType: 'ComboChart',
         containerId: 'chart_div',
         options: {
           title: this.symbol,
           legend: 'none',
+          seriesType: 'candlesticks',
+          series: {1: {type: 'bars'}},
           height: 500,
           candlestick: {
             fallingColor: { strokeWidth: 2, stroke: '#a52714' }, // red
