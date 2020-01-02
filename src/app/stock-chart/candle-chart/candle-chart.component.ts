@@ -22,9 +22,7 @@ export class CandleChartComponent implements OnInit {
               private alphaAvantageMapperService: AlphaAvantageMapperService,
               private route: ActivatedRoute){
 
-    this.gLib = this.gChartService.getGoogle();
-    this.gLib.charts.load('current', {packages: ['corechart', 'table']});
-    this.gLib.charts.setOnLoadCallback(this.drawChart.bind(this));
+
   }
 
   private async drawChart() {
@@ -50,6 +48,9 @@ export class CandleChartComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.gLib = this.gChartService.getGoogle();
+    this.gLib.charts.load('current', {packages: ['corechart', 'table']});
+    this.gLib.charts.setOnLoadCallback(this.drawChart.bind(this));
   }
 
 }

@@ -7,7 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   templateUrl: './stock-chart.component.html',
   styleUrls: ['./stock-chart.component.sass']
 })
-export class StockChartComponent implements OnInit, OnDestroy {
+export class StockChartComponent implements OnInit {
   subscriptionQueryParams: any;
   subscriptionParams: any;
   symbol: string;
@@ -18,22 +18,9 @@ export class StockChartComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    this.subscriptionQueryParams = this.route
-      .queryParams
-      .subscribe(params => {
-        this.full = !!params.full ? params.full === 'true' : false;
-      });
+    this.full = this.route.snapshot.queryParams.full === 'true';
 
-    this.subscriptionParams = this.route
-      .params
-      .subscribe(params => {
-        this.symbol = params.symbol;
-      });
-  }
-
-  ngOnDestroy() {
-    this.subscriptionQueryParams.unsubscribe();
-    this.subscriptionParams.unsubscribe();
+    this.symbol = this.route.snapshot.params.symbol;
   }
 
 }
