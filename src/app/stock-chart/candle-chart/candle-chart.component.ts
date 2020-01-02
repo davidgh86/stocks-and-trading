@@ -12,7 +12,8 @@ import { ActivatedRoute } from '@angular/router';
 export class CandleChartComponent implements OnInit {
 
   @Input() symbol: string;
-  @Input() fullContent: boolean;
+  // tslint:disable-next-line: no-input-rename
+  @Input('full-content') fullContent: boolean;
 
   private gLib: any;
 
