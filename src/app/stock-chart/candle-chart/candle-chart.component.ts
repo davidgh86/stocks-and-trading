@@ -52,7 +52,16 @@ export class CandleChartComponent implements OnInit {
 
     const chart = new this.gLib.visualization.ChartWrapper({
         chartType: 'CandlestickChart',
-        containerId: 'chart_div'
+        containerId: 'chart_div',
+        options: {
+          title: this.symbol,
+          legend: 'none',
+          height: 500,
+          candlestick: {
+            fallingColor: { strokeWidth: 2, stroke: '#a52714' }, // red
+            risingColor: { strokeWidth: 2, stroke: '#0f9d58' }   // green
+          }
+        }
     });
 
     function setOptions(wrapper) {
