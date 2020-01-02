@@ -5,14 +5,16 @@ import { GoogleChartsModule } from 'angular-google-charts';
 
 import { StockChartRoutingModule } from './stock-chart-routing.module';
 import { StockChartComponent } from './stock-chart.component';
-
+import { ServiceModule } from './service/service.module';
+import { CandleChartComponent } from './candle-chart/candle-chart.component';
 
 @NgModule({
-  declarations: [StockChartComponent],
+  declarations: [StockChartComponent, CandleChartComponent],
   imports: [
     CommonModule,
     StockChartRoutingModule,
-    GoogleChartsModule
-  ]
+    GoogleChartsModule,
+    ServiceModule
+  ],
 })
 export class StockChartModule { }

@@ -9,8 +9,8 @@ const routes: Routes = [
   },
   {
     path: 'indexes/stock-chart/:symbol',
-    loadChildren: () => import('./stock-chart/stock-chart.module').then(m => m.StockChartModule)
-  }
+    loadChildren: () => import('./stock-chart/stock-chart.module').then(m => m.StockChartModule),
+  },
 ];
 
 @NgModule({

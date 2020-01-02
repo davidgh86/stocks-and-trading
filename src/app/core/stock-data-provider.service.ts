@@ -16,9 +16,9 @@ export class StockDataProviderService {
 
   messages: string[] = [];
 
-  async getDaily(symbol: string): Promise<any> {
+  async getDaily(symbol: string, fullContent: boolean): Promise<any> {
 
-    const result = await this.http.get<any>(`${this.url}/daily/${symbol}`).toPromise();
+    const result = await this.http.get<any>(`${this.url}/daily/${symbol}?full=${fullContent}`).toPromise();
 
     return result;
   }
