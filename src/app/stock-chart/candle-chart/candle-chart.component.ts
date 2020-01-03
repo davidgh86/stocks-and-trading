@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, OnChanges } from '@angular/core';
 import { GoogleChartService } from '../service/google-chart.service';
 import { StockDataProviderService } from 'src/app/core/stock-data-provider.service';
 import { AlphaAvantageMapperService } from 'src/app/core/alpha-avantage-mapper.service';
@@ -9,11 +9,11 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './candle-chart.component.html',
   styleUrls: ['./candle-chart.component.sass']
 })
-export class CandleChartComponent implements OnInit {
+export class CandleChartComponent implements OnInit, OnChanges {
 
   @Input() symbol: string;
   // tslint:disable-next-line: no-input-rename
-  @Input('full-content') fullContent: boolean;
+  @Input('full-content') fullContent: string;
   @Input() frequency: string;
   @Input() live: boolean;
   @Output() stockValueReceived = new EventEmitter();
@@ -41,7 +41,7 @@ export class CandleChartComponent implements OnInit {
 
   private async drawChart() {
 
-    const dataResponse = await this.getDataResponse(this.frequency, this.symbol, this.fullContent);
+    const dataResponse = await this.getDataResponse(this.frequency, this.symbol, this.fullContent === 'full');
     this.stockValueReceived.emit();
     const alphaModelResponse = this.alphaAvantageMapperService.mapToTimeSerie(dataResponse);
     const dataArray = this.alphaAvantageMapperService.toGoogleChartModel(alphaModelResponse);//.filter(a => a[0]>new Date("2019-11-1"));
@@ -109,6 +109,10 @@ export class CandleChartComponent implements OnInit {
     this.gLib.charts.load('visualization', '1', {packages: ['controls', 'charteditor']});
 
     this.gLib.charts.setOnLoadCallback(this.drawChart.bind(this));
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    alert(JSON.stringify(changes))
   }
 
 }
