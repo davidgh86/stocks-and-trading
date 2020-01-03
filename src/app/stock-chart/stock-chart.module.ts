@@ -6,6 +6,7 @@ import { GoogleChartsModule } from 'angular-google-charts';
 import { StockChartRoutingModule } from './stock-chart-routing.module';
 import { StockChartComponent } from './stock-chart.component';
 import { ServiceModule } from './service/service.module';
+import { ReactiveFormsModule } from '@angular/forms';
 import { CandleChartComponent } from './candle-chart/candle-chart.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
@@ -16,7 +17,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     StockChartRoutingModule,
     GoogleChartsModule,
     ServiceModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    ReactiveFormsModule
   ],
 })
 export class StockChartModule { }
