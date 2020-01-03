@@ -112,7 +112,7 @@ export class CandleChartComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    alert(JSON.stringify(changes))
+    alert(JSON.stringify(changes));
   }
 
 }
