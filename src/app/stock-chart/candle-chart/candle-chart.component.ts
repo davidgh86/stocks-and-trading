@@ -14,6 +14,8 @@ export class CandleChartComponent implements OnInit {
   @Input() symbol: string;
   // tslint:disable-next-line: no-input-rename
   @Input('full-content') fullContent: boolean;
+  @Input() frequency: string;
+  @Input() live: boolean;
   @Output() stockValueReceived = new EventEmitter();
 
   private gLib: any;
@@ -23,11 +25,25 @@ export class CandleChartComponent implements OnInit {
               private alphaAvantageMapperService: AlphaAvantageMapperService) {
   }
 
+  private async getDataResponse(type, symbol, compact = true) {
+    if (type === 'daily') {
+      return await this.stockDataProviderService.getDaily(symbol, compact);
+    } else if (type === 'weekly') {
+      return await this.stockDataProviderService.getWeekly(symbol, compact);
+    } else if (type === 'intraday') {
+      return await this.stockDataProviderService.getIntraday(symbol, compact);
+    } else if (type === 'monthly') {
+      return await this.stockDataProviderService.getMonthly(symbol, compact);
+    } else {
+      throw new Error ('Type frequency not valid');
+    }
+  }
+
   private async drawChart() {
 
-    const dailyRequest = await this.stockDataProviderService.getDaily(this.symbol, this.fullContent);
+    const dataResponse = await this.getDataResponse(this.frequency, this.symbol, this.fullContent);
     this.stockValueReceived.emit();
-    const alphaModelResponse = this.alphaAvantageMapperService.mapToTimeSerie(dailyRequest);
+    const alphaModelResponse = this.alphaAvantageMapperService.mapToTimeSerie(dataResponse);
     const dataArray = this.alphaAvantageMapperService.toGoogleChartModel(alphaModelResponse);//.filter(a => a[0]>new Date("2019-11-1"));
     const data = google.visualization.arrayToDataTable(dataArray, true);
 

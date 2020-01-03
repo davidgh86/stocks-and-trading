@@ -10,7 +10,7 @@ import { TimeSerie } from './time-serie.model';
 })
 export class StockDataProviderService {
 
-  private url = ''
+  private url = '';
 
   constructor(private http: HttpClient) { }
 
@@ -19,6 +19,27 @@ export class StockDataProviderService {
   async getDaily(symbol: string, fullContent: boolean): Promise<any> {
 
     const result = await this.http.get<any>(`${this.url}/daily/${symbol}?full=${fullContent}`).toPromise();
+
+    return result;
+  }
+
+  async getWeekly(symbol: string, fullContent: boolean): Promise<any> {
+
+    const result = await this.http.get<any>(`${this.url}/weekly/${symbol}?full=${fullContent}`).toPromise();
+
+    return result;
+  }
+
+  async getMonthly(symbol: string, fullContent: boolean): Promise<any> {
+
+    const result = await this.http.get<any>(`${this.url}/monthly/${symbol}?full=${fullContent}`).toPromise();
+
+    return result;
+  }
+
+  async getIntraday(symbol: string, fullContent: boolean): Promise<any> {
+
+    const result = await this.http.get<any>(`${this.url}/intraday/${symbol}?full=${fullContent}`).toPromise();
 
     return result;
   }
