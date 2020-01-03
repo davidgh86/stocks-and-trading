@@ -9,4 +9,4 @@
 </form>
 
 <mat-progress-spinner *ngIf="!chartDataReceived" mode="indeterminate"></mat-progress-spinner>
-<app-candle-chart frequency="weekly" [symbol]="symbol" [full-content]="full" (stockValueReceived)="setValueAsRecieved()"></app-candle-chart>
+<app-candle-chart frequency="intraday" [symbol]="symbol" [full-content]="full" (stockValueReceived)="setValueAsRecieved()"></app-candle-chart>
