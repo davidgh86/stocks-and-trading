@@ -7,7 +7,7 @@
   <input type="radio" formControlName="outputsize" value="compact"/>Compact
   <input type="radio" formControlName="outputsize" value="full"/>Full
 </form>
-{{ settingsForm.value.outputsize | json }}
-
-<mat-progress-spinner *ngIf="!chartDataReceived" mode="indeterminate"></mat-progress-spinner>
-<app-candle-chart frequency="intraday" [symbol]="symbol" [full-content]="settingsForm.value.outputsize" (stockValueReceived)="setValueAsRecieved()"></app-candle-chart>
+<div style="position: relative;">
+  <mat-progress-spinner *ngIf="chartDataSending" mode="indeterminate" style="position: absolute; z-index: 10;"></mat-progress-spinner>
+  <app-candle-chart frequency="intraday" [symbol]="symbol" [full-content]="settingsForm.value.outputsize" (stockValueReceived)="setValueAsRecieved()" (stockValueSending)="setValueAsSending()"></app-candle-chart>
+</div>

@@ -12,7 +12,7 @@ export class StockChartComponent implements OnInit {
   subscriptionParams: any;
   symbol: string;
   full: boolean;
-  chartDataReceived: boolean;
+  chartDataSending: boolean;
 
   settingsForm = new FormGroup({
     frequency: new FormControl(''),
@@ -23,18 +23,20 @@ export class StockChartComponent implements OnInit {
   constructor(private route: ActivatedRoute) {}
 
   ngOnInit() {
-
+    this.chartDataSending = true;
     this.full = this.route.snapshot.queryParams.full === 'true';
     this.settingsForm.patchValue({
       livereload: this.full,
       outputsize: this.full ? 'full' : 'compact'
     });
     this.symbol = this.route.snapshot.params.symbol;
-    this.chartDataReceived = false;
   }
 
   setValueAsRecieved() {
-    this.chartDataReceived = true;
+    this.chartDataSending = false;
+  }
+  setValueAsSending() {
+    this.chartDataSending = true;
   }
 
 }
