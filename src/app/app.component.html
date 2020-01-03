@@ -8,7 +8,7 @@
 
   <mat-drawer #drawer class="example-sidenav side-menu-grid" mode="side">
     <!-- <div><a routerLink="/indexes/stock-chart/AAPL?full=true">Portfolio</a></div> -->
-    <div><a [routerLink]="['/indexes/stock-chart/AAPL']" [queryParams]="{ full: true }">Portfolio</a></div>
+    <div><a [routerLink]="['/indexes/stock-chart/AAPL']" [queryParams]="{ full: false }">Portfolio</a></div>
     <div><a routerLink="/indexes">Indexes</a></div>
     <div>Best rated companies</div>
   </mat-drawer>

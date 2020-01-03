@@ -1,2 +1,9 @@
+<!-- <form>
+  <input type="radio"/>Daily<br/>
+  <input type="radio"/>Weekly<br/>
+  <input type="radio"/>Monthly<br/>
+  <input type="radio"/>Intraday
+</form> -->
+
 <mat-progress-spinner *ngIf="!chartDataReceived" mode="indeterminate"></mat-progress-spinner>
 <app-candle-chart [symbol]="symbol" [full-content]="full" (stockValueReceived)="setValueAsRecieved()"></app-candle-chart>

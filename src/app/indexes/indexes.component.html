@@ -1,6 +1,17 @@
 <div class="flags-grid">
-  <img src="assets/img/usa128.png">
-  <img src="assets/img/sp128.png">
-  <img src="assets/img/jp128.png">
-  <img src="assets/img/ch128.png">
+  <a [routerLink]="['/indexes/stock-chart/NDAQ']" [queryParams]="{ full: false }">
+    <img src="assets/img/usa128.png">
+  </a>
+  <a [routerLink]="['/indexes/stock-chart/DJI']" [queryParams]="{ full: false }">
+    <img src="assets/img/usa128.png">
+  </a>
+  <a [routerLink]="['/indexes/stock-chart/^IBEX']" [queryParams]="{ full: false }">
+    <img src="assets/img/sp128.png">
+  </a>
+  <a [routerLink]="['/indexes/stock-chart/^N225']" [queryParams]="{ full: false }">
+    <img src="assets/img/jp128.png">
+  </a>
+  <a [routerLink]="['/indexes/stock-chart/^SSEC']" [queryParams]="{ full: false }">
+    <img src="assets/img/ch128.png">
+  </a>
 </div>
