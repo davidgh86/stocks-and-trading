@@ -1,9 +1,12 @@
-<!-- <form>
-  <input type="radio"/>Daily<br/>
-  <input type="radio"/>Weekly<br/>
-  <input type="radio"/>Monthly<br/>
-  <input type="radio"/>Intraday
-</form> -->
+<form [formGroup]="settingsForm">
+  <input type="radio" formControlName="frequency" value="daily"/>Daily
+  <input type="radio" formControlName="frequency" value="weekly"/>Weekly
+  <input type="radio" formControlName="frequency" value="monthly"/>Monthly
+  <input type="radio" formControlName="frequency" value="intraday"/>Intraday
+  <input type="checkbox" formControlName="livereload"/>live reload
+  <input type="radio" formControlName="outputsize" value="compact"/>Compact
+  <input type="radio" formControlName="outputsize" value="full"/>Full
+</form>
 
 <mat-progress-spinner *ngIf="!chartDataReceived" mode="indeterminate"></mat-progress-spinner>
-<app-candle-chart [symbol]="symbol" [full-content]="full" (stockValueReceived)="setValueAsRecieved()"></app-candle-chart>
+<app-candle-chart frequency="weekly" [symbol]="symbol" [full-content]="full" (stockValueReceived)="setValueAsRecieved()"></app-candle-chart>

@@ -1,7 +1,22 @@
 {
-    "/daily/*": {
-        "target": "http://localhost:3000",
-        "secure": false,
-        "logLevel": "debug"
-    }
+  "/daily/*": {
+    "target": "http://localhost:3000",
+    "secure": false,
+    "logLevel": "debug"
+  },
+  "/weekly/*": {
+    "target": "http://localhost:3000",
+    "secure": false,
+    "logLevel": "debug"
+  },
+  "/monthly/*": {
+    "target": "http://localhost:3000",
+    "secure": false,
+    "logLevel": "debug"
+  },
+  "/intraday/*": {
+    "target": "http://localhost:3000",
+    "secure": false,
+    "logLevel": "debug"
+  }
 }

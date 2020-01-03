@@ -8,15 +8,24 @@ export class AlphaAvantageMapperService {
 
   constructor() { }
 
-  public mapToTimeSerie(dailyResponse): TimeSerie {
-    const metadata = dailyResponse['Meta Data'];
+  private getDataKey(response) {
+    let keys = Object.keys(response);
+    for (let key of keys) {
+      if (key !== 'Meta Data') {
+        return key;
+      }
+    }
+  }
+
+  public mapToTimeSerie(response): TimeSerie {
+    const metadata = response['Meta Data'];
     const information = metadata['1. Information'];
     const symbol = metadata['2. Symbol'];
     const lastRefreshed = new Date(metadata['3. Last Refreshed']);
     const outputSize = metadata['4. Output Size'];
     const timeZone = metadata['5. Time Zone'];
 
-    const timeSeriesData = dailyResponse['Time Series (Daily)'];
+    const timeSeriesData = response[this.getDataKey(response)];
     const timeSeriesArray = [];
 
     for (let key in timeSeriesData) {
