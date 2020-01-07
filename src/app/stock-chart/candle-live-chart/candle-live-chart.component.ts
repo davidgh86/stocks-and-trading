@@ -13,6 +13,7 @@ export class CandleLiveChartComponent implements OnInit, OnDestroy {
   @Input() symbol: string;
   // tslint:disable-next-line: no-input-rename
   @Input() live: boolean;
+  @Input() timer: number;
   @Output() stockValueSending = new EventEmitter();
   @Output() stockValueReceived = new EventEmitter();
 
@@ -28,11 +29,7 @@ export class CandleLiveChartComponent implements OnInit, OnDestroy {
   }
 
   private async getDataResponse(symbol) {
-    return await this.stockDataProviderService.getIntraday(symbol, false);
-  }
-
-  private async getCurrentQuote(symbol) {
-    return await this.stockDataProviderService.getCurrentQuoteValue(symbol);
+    return await this.stockDataProviderService.getIntraday(symbol, true);
   }
 
   private async drawChart() {
@@ -91,16 +88,16 @@ export class CandleLiveChartComponent implements OnInit, OnDestroy {
     this.dash.bind([this.control], [chart]);
     this.dash.draw(this.data);
 
-    this.interval = setInterval(async() => {
+    this.interval = setInterval(async () => {
       await this.updateData(this.symbol);
-      this.dash.draw(this.data);
-      this.control.setState({
+      await this.dash.draw(this.data);
+      await this.control.setState({
         range: {
           start: new Date(0),
           end: new Date(Date.now())
         }
       });
-    }, 1000);
+    }, this.timer * 1000);
   }
 
   ngOnInit() {
@@ -115,16 +112,41 @@ export class CandleLiveChartComponent implements OnInit, OnDestroy {
     const dataResponse = await this.getDataResponse(symbol);
     const alphaModelResponse = this.alphaAvantageMapperService.mapToTimeSerie(dataResponse);
     const dataArray = this.alphaAvantageMapperService.toGoogleChartModel(alphaModelResponse);
-    this.data = google.visualization.arrayToDataTable(dataArray, true);
+    const todayOpenTime = this.getTodayOpenTime();
+    const todayCloseTime = this.getTodayCloseTime();
+    const filteredDataArray = dataArray.filter((a) => {
+      return a[0] >= todayOpenTime && a[0] <= todayCloseTime;
+    });
+    this.data = google.visualization.arrayToDataTable(filteredDataArray, true);
     this.stockValueReceived.emit();
   }
 
+  private getTodayOpenTime() {
+    const date = new Date(Date.now());
+    date.setHours(15);
+    date.setMinutes(30);
+    date.setSeconds(0);
+    return date;
+  }
+
+  private getTodayCloseTime() {
+    const date = new Date(Date.now());
+    date.setHours(22);
+    date.setMinutes(0);
+    date.setSeconds(0);
+    return date;
+  }
+
   private async updateData(symbol) {
-    const dataResponse = await this.getCurrentQuote(symbol);
-    const alphaModelResponse = this.alphaAvantageMapperService.mapToGlobalQuote(dataResponse);
-    const dataArray = this.alphaAvantageMapperService.qouteToGoogleChartModel(alphaModelResponse);
-    this.data.addRows(dataArray);
-    // TODO add data and refresh this.data = google.visualization.arrayToDataTable(dataArray, true);
+    const dataResponse = await this.getDataResponse(symbol);
+    const alphaModelResponse = this.alphaAvantageMapperService.mapToTimeSerie(dataResponse);
+    const dataArray = this.alphaAvantageMapperService.toGoogleChartModel(alphaModelResponse);
+    const todayOpenTime = this.getTodayOpenTime();
+    const todayCloseTime = this.getTodayCloseTime();
+    const filteredDataArray = dataArray.filter((a) => {
+      return a[0] >= todayOpenTime && a[0] <= todayCloseTime;
+    });
+    this.data = google.visualization.arrayToDataTable(filteredDataArray, true);
   }
 
   ngOnDestroy(): void {

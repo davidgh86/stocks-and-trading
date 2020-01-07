@@ -4,15 +4,23 @@
     <input type="radio" formControlName="frequency" value="weekly"/>Weekly
     <input type="radio" formControlName="frequency" value="monthly"/>Monthly
     <input type="radio" formControlName="frequency" value="intraday"/>Intraday
-    <input type="checkbox" formControlName="livereload"/>live reload
+    <span *ngIf="settingsForm.value.frequency==='intraday'"><input type="checkbox" formControlName="livereload"/>live reload</span>
     <input type="radio" formControlName="outputsize" value="compact"/>Compact
     <input type="radio" formControlName="outputsize" value="full"/>Full
   </fieldset>
 </form>
+<mat-progress-spinner *ngIf="chartDataSending" mode="indeterminate" class="chart-spinner"></mat-progress-spinner>
+
 <div class="chart-container">
-  <app-candle-live-chart *ngIf="settingsForm.value.frequency==='intraday' && settingsForm.value.livereload; else staticReload" [symbol]="symbol"></app-candle-live-chart>
+  <!-- <div > -->
+    <app-candle-live-chart
+    *ngIf="settingsForm.value.frequency==='intraday' && settingsForm.value.livereload; else staticReload"
+    [symbol]="symbol"
+    timer="7"
+    (stockValueReceived)="setValueAsRecieved()"
+    (stockValueSending)="setValueAsSending()"></app-candle-live-chart>
+  <!-- </div> -->
   <ng-template #staticReload>
-    <mat-progress-spinner *ngIf="chartDataSending" mode="indeterminate" class="chart-spinner"></mat-progress-spinner>
     <app-candle-chart [frequency]="settingsForm.value.frequency" [symbol]="symbol" [full-content]="settingsForm.value.outputsize" (stockValueReceived)="setValueAsRecieved()" (stockValueSending)="setValueAsSending()"></app-candle-chart>
   </ng-template>
 </div>

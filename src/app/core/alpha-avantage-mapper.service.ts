@@ -6,8 +6,11 @@ import { AlphavantageQuote } from './alphavantage-quote.model';
   providedIn: 'root'
 })
 export class AlphaAvantageMapperService {
+  moment: any;
 
-  constructor() { }
+  constructor() {
+    this.moment = require('moment-timezone');
+  }
 
   private getDataKey(response) {
     const keys = Object.keys(response);
@@ -22,9 +25,13 @@ export class AlphaAvantageMapperService {
     const metadata = response['Meta Data'];
     const information = metadata['1. Information'];
     const symbol = metadata['2. Symbol'];
-    const lastRefreshed = new Date(metadata['3. Last Refreshed']);
+
     const outputSize = metadata['4. Output Size'];
-    const timeZone = metadata['5. Time Zone'];
+    let timeZone = metadata['5. Time Zone'];
+    if (!timeZone) {
+      timeZone = metadata['6. Time Zone'];
+    }
+    const lastRefreshed = new Date(this.moment.tz(metadata['3. Last Refreshed'], timeZone).valueOf());
 
     const timeSeriesData = response[this.getDataKey(response)];
     const timeSeriesArray = [];
@@ -35,7 +42,8 @@ export class AlphaAvantageMapperService {
           const quote = timeSeriesData[key];
           timeSeriesArray.push(
             {
-              date: new Date(key),
+              //date: new Date(key),
+              date: new Date(this.moment.tz(key, timeZone).valueOf()),
               open: parseFloat(quote['1. open']),
               high: parseFloat(quote['2. high']),
               low: parseFloat(quote['3. low']),
