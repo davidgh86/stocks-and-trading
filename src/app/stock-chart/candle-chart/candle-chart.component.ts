@@ -22,6 +22,7 @@ export class CandleChartComponent implements OnInit, OnChanges {
   private gLib: any;
   data: google.visualization.DataTable;
   dash: any;
+  control: any;
 
   constructor(private gChartService: GoogleChartService,
               private stockDataProviderService: StockDataProviderService,
@@ -33,27 +34,20 @@ export class CandleChartComponent implements OnInit, OnChanges {
       return await this.stockDataProviderService.getDaily(symbol, compact);
     } else if (type === 'weekly') {
       return await this.stockDataProviderService.getWeekly(symbol, compact);
-    } else if (type === 'intraday') {
-      return await this.stockDataProviderService.getIntraday(symbol, compact);
     } else if (type === 'monthly') {
       return await this.stockDataProviderService.getMonthly(symbol, compact);
     } else {
-      throw new Error ('Type frequency not valid');
+      return await this.stockDataProviderService.getIntraday(symbol, compact);
     }
   }
 
   private async drawChart() {
 
     await this.updateDataChart(this.frequency, this.symbol, this.fullContent === 'full');
-    // const dataResponse = await this.getDataResponse(this.frequency, this.symbol, this.fullContent === 'full');
-    // this.stockValueReceived.emit();
-    // const alphaModelResponse = this.alphaAvantageMapperService.mapToTimeSerie(dataResponse);
-    // const dataArray = this.alphaAvantageMapperService.toGoogleChartModel(alphaModelResponse);//.filter(a => a[0]>new Date("2019-11-1"));
-    // this.data = google.visualization.arrayToDataTable(dataArray, true);
 
     this.dash = new this.gLib.visualization.Dashboard(document.getElementById('dashboard'));
 
-    const control = new this.gLib.visualization.ControlWrapper({
+    this.control = new this.gLib.visualization.ControlWrapper({
         controlType: 'ChartRangeFilter',
         containerId: 'control_div',
         options: {
@@ -103,7 +97,7 @@ export class CandleChartComponent implements OnInit, OnChanges {
     setOptions(chart);
 
 
-    this.dash.bind([control], [chart]);
+    this.dash.bind([this.control], [chart]);
     this.dash.draw(this.data);
 
 }
@@ -119,21 +113,30 @@ export class CandleChartComponent implements OnInit, OnChanges {
     this.stockValueSending.emit();
     const dataResponse = await this.getDataResponse(frequency, symbol, fullContent);
     const alphaModelResponse = this.alphaAvantageMapperService.mapToTimeSerie(dataResponse);
-    const dataArray = this.alphaAvantageMapperService.toGoogleChartModel(alphaModelResponse);//.filter(a => a[0]>new Date("2019-11-1"));
+    const dataArray = this.alphaAvantageMapperService.toGoogleChartModel(alphaModelResponse);
     this.data = google.visualization.arrayToDataTable(dataArray, true);
     this.stockValueReceived.emit();
   }
 
   async ngOnChanges(changes: SimpleChanges) {
     let changingFullContent = false;
-    if (!!changes.fullContent.currentValue && !changes.fullContent.firstChange) {
+    let changingFrequencyContent = false;
+    if ( !!changes.fullContent && !!changes.fullContent.currentValue && !changes.fullContent.firstChange) {
       changingFullContent = true;
+    } else if (!!changes.frequency && !!changes.frequency.currentValue && !changes.frequency.firstChange) {
+      changingFrequencyContent = true;
     }
-    if (changingFullContent) {
-      const fullContent = changes.fullContent.currentValue === 'full';
+    if (changingFullContent || changingFrequencyContent) {
+      const fullContent = this.fullContent === 'full';
 
-      await this.updateDataChart(this.frequency, this.fullContent, fullContent);
+      await this.updateDataChart(this.frequency, this.symbol, fullContent);
       this.dash.draw(this.data);
+      this.control.setState({
+        range: {
+          start: new Date(0),
+          end: new Date(Date.now())
+        }
+      });
     }
   }
 
