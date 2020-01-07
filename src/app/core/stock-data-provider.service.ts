@@ -44,7 +44,14 @@ export class StockDataProviderService {
     return result;
   }
 
-  private handleError<T> (operation = 'operation', result?: T) {
+  async getCurrentQuoteValue(symbol: any) {
+
+    const result = await this.http.get<any>(`${this.url}/global-quote/${symbol}`).toPromise();
+
+    return result;
+  }
+
+  private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
 
       // TODO: send the error to remote logging infrastructure

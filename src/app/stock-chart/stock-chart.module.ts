@@ -9,9 +9,10 @@ import { ServiceModule } from './service/service.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CandleChartComponent } from './candle-chart/candle-chart.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { CandleLiveChartComponent } from './candle-live-chart/candle-live-chart.component';
 
 @NgModule({
-  declarations: [StockChartComponent, CandleChartComponent],
+  declarations: [StockChartComponent, CandleChartComponent, CandleLiveChartComponent],
   imports: [
     CommonModule,
     StockChartRoutingModule,

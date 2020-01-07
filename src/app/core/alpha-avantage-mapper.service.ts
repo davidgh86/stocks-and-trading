@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { TimeSerie } from './time-serie.model';
+import { AlphavantageQuote } from './alphavantage-quote.model';
 
 @Injectable({
   providedIn: 'root'
@@ -9,8 +10,8 @@ export class AlphaAvantageMapperService {
   constructor() { }
 
   private getDataKey(response) {
-    let keys = Object.keys(response);
-    for (let key of keys) {
+    const keys = Object.keys(response);
+    for (const key of keys) {
       if (key !== 'Meta Data') {
         return key;
       }
@@ -28,7 +29,7 @@ export class AlphaAvantageMapperService {
     const timeSeriesData = response[this.getDataKey(response)];
     const timeSeriesArray = [];
 
-    for (let key in timeSeriesData) {
+    for (const key in timeSeriesData) {
       // check if the property/key is defined in the object itself, not in parent
       if (timeSeriesData.hasOwnProperty(key)) {
           const quote = timeSeriesData[key];
@@ -59,6 +60,25 @@ export class AlphaAvantageMapperService {
     };
   }
 
+  public mapToGlobalQuote(response): AlphavantageQuote {
+    const globalQuote = response['Global Quote'];
+    const date = new Date(Date.now());
+    const open = parseFloat(globalQuote['02. open']);
+    const high = parseFloat(globalQuote['03. high']);
+    const low = parseFloat(globalQuote['04. low']);
+    const close = parseFloat(globalQuote['05. price']);
+    const volume = parseFloat(globalQuote['06. volume']);
+    return {
+        date,
+        open,
+        high,
+        low,
+        close,
+        volume
+      };
+  }
+
+
   public toGoogleChartModel(timeSerie: TimeSerie) {
     const result = [];
     const quotes = timeSerie.quotes;
@@ -73,6 +93,21 @@ export class AlphaAvantageMapperService {
         quote.volume
       ]);
     }
+    return result;
+  }
+
+  public qouteToGoogleChartModel(quote: AlphavantageQuote) {
+    const result = [];
+
+    const upward = quote.open <= quote.close;
+    result.push([
+      quote.date,
+      upward ? quote.low : quote.high,
+      quote.open,
+      quote.close,
+      upward ? quote.high : quote.low,
+      quote.volume
+    ]);
     return result;
   }
 }
