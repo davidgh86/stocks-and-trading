@@ -94,7 +94,13 @@ export class CandleLiveChartComponent implements OnInit, OnDestroy {
     this.interval = setInterval(async() => {
       await this.updateData(this.symbol);
       this.dash.draw(this.data);
-    }, 5000);
+      this.control.setState({
+        range: {
+          start: new Date(0),
+          end: new Date(Date.now())
+        }
+      });
+    }, 1000);
   }
 
   ngOnInit() {
