@@ -114,7 +114,19 @@ export class CandleChartComponent implements OnInit, OnChanges {
     const dataResponse = await this.getDataResponse(frequency, symbol, fullContent);
     const alphaModelResponse = this.alphaAvantageMapperService.mapToTimeSerie(dataResponse);
     const dataArray = this.alphaAvantageMapperService.toGoogleChartModel(alphaModelResponse);
-    this.data = google.visualization.arrayToDataTable(dataArray, true);
+
+    const discreteData = new google.visualization.DataTable();
+    discreteData.addColumn('date', 'date');
+    discreteData.addColumn('number', 'extreme 1');
+    discreteData.addColumn('number', 'open');
+    discreteData.addColumn('number', 'close');
+    discreteData.addColumn('number', 'extreme 2');
+    discreteData.addColumn('number', 'volume');
+
+    discreteData.addRows(dataArray);
+
+    //this.data = google.visualization.arrayToDataTable(dataArray, true);
+    this.data = discreteData;
     this.stockValueReceived.emit();
   }
 

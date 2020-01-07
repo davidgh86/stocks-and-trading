@@ -9,8 +9,8 @@ export class AlphaAvantageMapperService {
   constructor() { }
 
   private getDataKey(response) {
-    let keys = Object.keys(response);
-    for (let key of keys) {
+    const keys = Object.keys(response);
+    for (const key of keys) {
       if (key !== 'Meta Data') {
         return key;
       }
